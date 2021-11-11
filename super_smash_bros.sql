@@ -25,3 +25,11 @@ CREATE TABLE IF NOT EXISTS `super_smash_bros`.`character`(
     `admin_id` INT(7),
     FOREIGN KEY (`admin_id`) REFERENCES admin(admin_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS `super_smash_bros`.`item`(
+    `item_id` INT(7) PRIMARY KEY AUTO_INCREMENT,
+    `name` VARCHAR(255),
+    `description` VARCHAR(255),
+    `admin_id` INT(7),
+    FOREIGN KEY (`admin_id`) REFERENCES admin(admin_id) ON DELETE CASCADE ON UPDATE CASCADE
+);
