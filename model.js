@@ -16,3 +16,13 @@ export class Admin{
         this.user_id = user_id
     }
 }
+
+export class Character{
+    constructor(character_id, name, attributes, description, admin_id) {
+        this.character_id = character_id
+        this.name = name
+        this.attributes = attributes
+        this.description = description
+        this.admin_id = admin_id
+    }
+}
