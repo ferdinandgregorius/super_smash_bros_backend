@@ -54,3 +54,12 @@ export class Modes{
         this.admin_id = admin_id
     }
 }
+
+export class Event_matches{
+    constructor(event_id, name, description, admin_id) {
+        this.event_id = event_id
+        this.name = name
+        this.description = description
+        this.admin_id = admin_id
+    }
+}
