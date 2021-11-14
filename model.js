@@ -35,3 +35,13 @@ export class Item{
         this.admin_id = admin_id
     }
 }
+
+export class Stages{
+    constructor(stage_id, name, description, battle_environment, admin_id) {
+        this.stage_id = stage_id
+        this.name = name
+        this.description = description
+        this.battle_environment = battle_environment
+        this.admin_id = admin_id
+    }
+}
