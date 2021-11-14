@@ -6,3 +6,13 @@ export class User{
         this.salt = salt
     }
 }
+
+export class Admin{
+    constructor(admin_id, username, password, salt, user_id) {
+        this.admin_id = admin_id
+        this.username = username
+        this.password = password
+        this.salt = salt
+        this.user_id = user_id
+    }
+}
