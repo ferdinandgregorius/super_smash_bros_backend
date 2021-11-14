@@ -26,3 +26,12 @@ export class Character{
         this.admin_id = admin_id
     }
 }
+
+export class Item{
+    constructor(item_id, name, description, admin_id) {
+        this.item_id = item_id
+        this.name = name
+        this.description = description
+        this.admin_id = admin_id
+    }
+}
