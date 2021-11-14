@@ -45,3 +45,12 @@ export class Stages{
         this.admin_id = admin_id
     }
 }
+
+export class Modes{
+    constructor(modes_id, name, description, admin_id) {
+        this.mmodes_id = modes_id
+        this.name = name
+        this.description = description
+        this.admin_id = admin_id
+    }
+}
