@@ -94,7 +94,30 @@ export class Dao{
                 }
             })
         })
+    }
 
+    register(user){
+        return new Promise(async (resolve,reject)=>{
+            if(!user instanceof User){
+                reject(MISMATCH_OBJ_TYPE)
+                return
+            }
+
+            const query = "INSERT INTO `user`(`username`, `password`, `salt`) "+
+                "VALUES(?, ?, ?) "
+            const salt = await bcrypt.genSalt(5)
+            const hash = await bcrypt.hash(user.password, salt)
+
+            this.mysqlConn.query(query,[user.username, hash, salt], (error,result)=>{
+                if(error){
+                    reject(error)
+                    return
+                }
+
+                user.user_id = result.insertId
+                resolve(user)
+            })
+        })
     }
 
 
