@@ -18,6 +18,7 @@ import {
     Modes,
     Event_matches
 } from "./model"
+import {reject} from "bcrypt/promises";
 
 export class Dao{
     constructor(host, user, password, dbname) {
@@ -66,6 +67,34 @@ export class Dao{
         }
 
         handleConnection()
+    }
+
+    login(username, password){
+        return new Promise(async (resolve, reject)=>{
+            const query = "SELECT * FROM user u " + "WHERE u.username = ? "
+
+            this.mysqlConn.query(query, username, (error,result)=>{
+                if(error){
+                    reject(error)
+                    return
+                }
+
+                if(result.length > 0){
+                    const salt = result[0].salt
+                    const hashedPassword = bcrypt.hashSync(password,salt)
+                    const bcryptedPassword = hashedPassword === result[0].password ? true : false
+
+                    if(bcryptedPassword){
+                        resolve(new User(result[0].user_id, result[0].username, result[0].password, result[0].salt))
+                    }else {
+                        reject("FALSE_AUTH")
+                    }
+                }else {
+                    reject("FALSE_AUTH")
+                }
+            })
+        })
+
     }
 
 
