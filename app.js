@@ -61,6 +61,37 @@ const password = typeof process.env.MY_SQL_PASSWORD === 'undefined' ? '' : proce
 const dbname = process.env.MY_SQL_DBNAME
 const dao = new Dao(host, user, password, dbname)
 
+app.get('/api/login',(req,res)=>{
+    if(req.body.username === 'undefined' || req.body.password === 'undefined'){
+        res.status(400).send({
+            success:false,
+            error:WRONG_BODY_FORMAT
+        })
+        return
+    }
+
+    dao.login(req.body.username, req.body.password).then(result=>{
+        res.status(200).send({
+            success: true,
+            result: result,
+            message: "Authentication Successful"
+        })
+    }).catch(error=>{
+        if(error === "FALSE_AUTH"){
+            res.status(200).send({
+                success: false,
+                auth: false,
+                message: "Incorrect username or password"
+            })
+        }else{
+            res.status(500).send({
+                success: false,
+                error: SOMETHING_WENT_WRONG
+            })
+        }
+    })
+})
+
 app.listen(PORT, ()=>{
     console.info(`Server serving port ${PORT}`)
 })
