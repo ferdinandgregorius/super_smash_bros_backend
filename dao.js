@@ -31,10 +31,10 @@ export class Dao{
         const handleConnection=()=>{
             return new Promise(resolve => {
                 this.mysqlConn = new mysqlConn(
-                    this._host = host,
-                    this._user = user,
-                    this._password = password,
-                    this._dbname = dbname
+                    this._host,
+                    this._user,
+                    this._password,
+                    this._dbname
                 )
 
                 this.mysqlConn.connect(error=>{

@@ -1,5 +1,6 @@
 import fs from 'fs';
-import https from 'https';
+//import https from 'https';
+import  http from 'http';
 import bodyParser from "body-parser";
 import express from 'express';
 import dotenv from 'dotenv';
@@ -115,10 +116,6 @@ app.post('/api/register',(req,res)=>{
         })
     })
 })
-
 app.listen(PORT, ()=>{
     console.info(`Server serving port ${PORT}`)
 })
-
-const server = https.createServer(app)
-server.listen(PORT)
