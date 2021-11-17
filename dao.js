@@ -18,7 +18,6 @@ import {
     Modes,
     Event_matches
 } from "./model"
-import {reject} from "bcrypt/promises";
 
 export class Dao{
     constructor(host, user, password, dbname) {
