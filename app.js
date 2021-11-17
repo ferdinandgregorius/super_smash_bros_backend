@@ -84,11 +84,35 @@ app.get('/api/login',(req,res)=>{
                 message: "Incorrect username or password"
             })
         }else{
+            console.error(error)
             res.status(500).send({
                 success: false,
                 error: SOMETHING_WENT_WRONG
             })
         }
+    })
+})
+
+app.post('/api/register',(req,res)=>{
+    if(req.body.username === 'undefined' || req.body.password === 'undefined'){
+        res.status(400).send({
+            success: false,
+            error: WRONG_BODY_FORMAT
+        })
+        return
+    }
+
+    dao.register(new User(null, req.body.username, req.body.password)).then(result=>{
+        res.status(200).send({
+            success: true,
+            result: result
+        })
+    }).catch(error=>{
+        console.error(error)
+        res.status(500).send({
+            success: false,
+            error: SOMETHING_WENT_WRONG
+        })
     })
 })
 
