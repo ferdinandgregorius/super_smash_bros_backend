@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS `super_smash_bros`.`admin`(
     FOREIGN KEY (`user_id`) REFERENCES user(user_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS `super_smash_bros`.`character`(
+CREATE TABLE IF NOT EXISTS `super_smash_bros`.`characters`(
     `character_id` INT(7) PRIMARY KEY AUTO_INCREMENT,
     `name` VARCHAR(255),
     `attributes` VARCHAR(255),
@@ -57,4 +57,12 @@ CREATE TABLE IF NOT EXISTS `super_smash_bros`.`event_matches`(
     `description` VARCHAR(255),
     `admin_id` INT(7),
     FOREIGN KEY (`admin_id`) REFERENCES admin(admin_id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS `super_smash_bros`.`articles`(
+    `article_id` INT(7) PRIMARY KEY AUTO_INCREMENT,
+    `title` VARCHAR(60),
+    `body` VARCHAR(1000),
+    `character_id`INT(7),
+    FOREIGN KEY (`character_id`) REFERENCES characters(character_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
