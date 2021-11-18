@@ -63,3 +63,12 @@ export class Event_matches{
         this.admin_id = admin_id
     }
 }
+
+export class Articles{
+    constructor(article_id, title, body, character_id) {
+        this.article_id = article_id
+        this.title = title
+        this.body = body
+        this.character_id = character_id
+    }
+}
