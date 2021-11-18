@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS `super_smash_bros`.`user`(
     `user_id` INT(7) PRIMARY KEY AUTO_INCREMENT,
     `username` VARCHAR(255),
     `password` VARCHAR(255),
+    `is_deleted` TINYINT(1),
     `salt` VARCHAR(255)
 );
 
@@ -13,6 +14,7 @@ CREATE TABLE IF NOT EXISTS `super_smash_bros`.`admin`(
     `username` VARCHAR(255),
     `password` VARCHAR(255),
     `salt` VARCHAR(255),
+    `is_deleted` TINYINT(1),
     `user_id` INT(7),
     FOREIGN KEY (`user_id`) REFERENCES user(user_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
