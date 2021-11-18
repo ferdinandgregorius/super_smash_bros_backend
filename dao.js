@@ -16,7 +16,7 @@ import {
     Item,
     Stages,
     Modes,
-    Event_matches
+    Event_matches, Articles
 } from "./model"
 
 export class Dao{
@@ -119,5 +119,28 @@ export class Dao{
         })
     }
 
+    retrieveArticles(){
+        return new Promise((resolve, reject)=>{
+            const query = "SELECT * FROM articles "
 
+            this.mysqlConn.query(query, (error,result)=>{
+                if(error){
+                    reject(error)
+                    return
+                }
+
+                let articles = []
+                for(let i = 0; i<result.length; i++){
+                    articles.push(new Articles(
+                        result[i].article_id,
+                        result[i].title,
+                        result[i].body,
+                        result[i].character_id
+                    ))
+                }
+
+                resolve(articles)
+            })
+        })
+    }
 }
