@@ -220,6 +220,26 @@ export class Dao{
         })
     }
 
+    deleteCharacter(character){
+        return new Promise((resolve,reject)=>{
+            if(!character instanceof  Character){
+                reject(MISMATCH_OBJ_TYPE)
+                return
+            }
+
+            const query = "DELETE FROM character WHERE character_id = ?"
+            this.mysqlConn.query(query, character.character_id, (error,result)=>{
+
+                if(error){
+                    reject(error)
+                    return
+                }
+
+                resolve(SUCCESS)
+            })
+        })
+    }
+
     retrieveArticles(){
         return new Promise((resolve, reject)=>{
             const query = "SELECT * FROM articles "
