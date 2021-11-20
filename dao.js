@@ -135,8 +135,38 @@ export class Dao{
                         result[i].character_id,
                         result[i].name,
                         result[i].attributes,
-                        result[i].description,
-                        result[i].admin_id
+                        result[i].description
+                    ))
+                }
+
+                resolve(characters)
+            })
+        })
+    }
+
+    retrieveOneCharacter(character){
+        return new Promise((resolve,reject)=>{
+
+            if(!character instanceof Character){
+                reject(MISMATCH_OBJ_TYPE)
+                return
+            }
+
+            const query = "SELECT * FROM characters WHERE character_id = ? "
+
+            this.mysqlConn.query(query, character.character_id, (error,result)=>{
+                if(error){
+                    reject(error)
+                    return
+                }
+
+                let characters = []
+                for(let i =0; i<result.length; i++){
+                    characters.push(new Character(
+                        result[i].character_id,
+                        result[i].name,
+                        result[i].attributes,
+                        result[i].description
                     ))
                 }
 
