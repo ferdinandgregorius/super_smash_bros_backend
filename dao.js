@@ -198,6 +198,27 @@ export class Dao{
         })
     }
 
+    updateCharacter(character){
+        return new Promise((resolve,reject)=>{
+            if(!character instanceof  Character){
+                reject(MISMATCH_OBJ_TYPE)
+                return
+            }
+
+            const query = "UPDATE characters SET name = ?, attributes = ?, description = ? " +
+                "WHERE character_id = ?"
+            this.mysqlConn.query(query, [character.name, character.attributes,
+                character.description, character.character_id], (error,result)=>{
+
+                if(error){
+                    reject(error)
+                    return
+                }
+
+                resolve(character)
+            })
+        })
+    }
 
     retrieveArticles(){
         return new Promise((resolve, reject)=>{
