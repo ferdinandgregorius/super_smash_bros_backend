@@ -62,7 +62,7 @@ const password = typeof process.env.MY_SQL_PASSWORD === 'undefined' ? '' : proce
 const dbname = process.env.MY_SQL_DBNAME
 const dao = new Dao(host, user, password, dbname)
 
-app.get('/api/login',(req,res)=>{
+app.post('/api/login',(req,res)=>{
     if(req.body.username === 'undefined' || req.body.password === 'undefined'){
         res.status(400).send({
             success:false,
