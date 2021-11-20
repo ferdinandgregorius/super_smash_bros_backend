@@ -18,49 +18,44 @@ export class Admin{
 }
 
 export class Character{
-    constructor(character_id, name, attributes, description, admin_id) {
+    constructor(character_id, name, attributes, description) {
         this.character_id = character_id
         this.name = name
         this.attributes = attributes
         this.description = description
-        this.admin_id = admin_id
     }
 }
 
 export class Item{
-    constructor(item_id, name, description, admin_id) {
+    constructor(item_id, name, description) {
         this.item_id = item_id
         this.name = name
         this.description = description
-        this.admin_id = admin_id
     }
 }
 
 export class Stages{
-    constructor(stage_id, name, description, battle_environment, admin_id) {
+    constructor(stage_id, name, description, battle_environment) {
         this.stage_id = stage_id
         this.name = name
         this.description = description
         this.battle_environment = battle_environment
-        this.admin_id = admin_id
     }
 }
 
 export class Modes{
-    constructor(modes_id, name, description, admin_id) {
+    constructor(modes_id, name, description) {
         this.mmodes_id = modes_id
         this.name = name
         this.description = description
-        this.admin_id = admin_id
     }
 }
 
 export class Event_matches{
-    constructor(event_id, name, description, admin_id) {
+    constructor(event_id, name, description) {
         this.event_id = event_id
         this.name = name
         this.description = description
-        this.admin_id = admin_id
     }
 }
 

@@ -55,6 +55,6 @@ CREATE TABLE IF NOT EXISTS `super_smash_bros`.`articles`(
     `article_id` INT(7) PRIMARY KEY AUTO_INCREMENT,
     `title` VARCHAR(60),
     `body` VARCHAR(1000),
-    `character_id`INT(7),
+    `character_id` INT(7),
     FOREIGN KEY (`character_id`) REFERENCES characters(character_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
