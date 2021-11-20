@@ -79,7 +79,7 @@ app.post('/api/login',(req,res)=>{
         })
     }).catch(error=>{
         if(error === "FALSE_AUTH"){
-            res.status(200).send({
+            res.status(400).send({
                 success: false,
                 auth: false,
                 message: "Incorrect username or password"
