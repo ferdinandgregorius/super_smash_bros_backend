@@ -119,6 +119,32 @@ export class Dao{
         })
     }
 
+    retrieveCharacters(){
+        return new Promise((resolve,reject)=>{
+            const query = "SELECT * FROM characters "
+
+            this.mysqlConn.query(query, (error,result)=>{
+                if(error){
+                    reject(error)
+                    return
+                }
+
+                let characters = []
+                for(let i =0; i<result.length; i++){
+                    characters.push(new Character(
+                        result[i].character_id,
+                        result[i].name,
+                        result[i].attributes,
+                        result[i].description,
+                        result[i].admin_id
+                    ))
+                }
+
+                resolve(characters)
+            })
+        })
+    }
+
     retrieveArticles(){
         return new Promise((resolve, reject)=>{
             const query = "SELECT * FROM articles "

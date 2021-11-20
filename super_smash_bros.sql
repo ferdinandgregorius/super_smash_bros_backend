@@ -23,42 +23,32 @@ CREATE TABLE IF NOT EXISTS `super_smash_bros`.`characters`(
     `character_id` INT(7) PRIMARY KEY AUTO_INCREMENT,
     `name` VARCHAR(255),
     `attributes` VARCHAR(255),
-    `description` VARCHAR(255),
-    `admin_id` INT(7),
-    FOREIGN KEY (`admin_id`) REFERENCES admin(admin_id) ON DELETE CASCADE ON UPDATE CASCADE
+    `description` VARCHAR(255)
 );
 
 CREATE TABLE IF NOT EXISTS `super_smash_bros`.`item`(
     `item_id` INT(7) PRIMARY KEY AUTO_INCREMENT,
     `name` VARCHAR(255),
-    `description` VARCHAR(255),
-    `admin_id` INT(7),
-    FOREIGN KEY (`admin_id`) REFERENCES admin(admin_id) ON DELETE CASCADE ON UPDATE CASCADE
+    `description` VARCHAR(255)
 );
 
 CREATE TABLE IF NOT EXISTS `super_smash_bros`.`stages`(
     `stage_id` INT(7) PRIMARY KEY AUTO_INCREMENT,
     `name` VARCHAR(255),
     `description` VARCHAR(255),
-    `battle_environment` VARCHAR(255),
-    `admin_id` INT(7),
-    FOREIGN KEY (`admin_id`) REFERENCES admin(admin_id) ON DELETE CASCADE ON UPDATE CASCADE
+    `battle_environment` VARCHAR(255)
 );
 
 CREATE TABLE IF NOT EXISTS `super_smash_bros`.`modes`(
     `modes_id` INT(7) PRIMARY KEY AUTO_INCREMENT,
     `name` VARCHAR(255),
-    `description` VARCHAR(255),
-    `admin_id` INT(7),
-    FOREIGN KEY (`admin_id`) REFERENCES admin(admin_id) ON DELETE CASCADE ON UPDATE CASCADE
+    `description` VARCHAR(255)
 );
 
 CREATE TABLE IF NOT EXISTS `super_smash_bros`.`event_matches`(
     `event_id` INT(7) PRIMARY KEY AUTO_INCREMENT,
     `name` VARCHAR(255),
-    `description` VARCHAR(255),
-    `admin_id` INT(7),
-    FOREIGN KEY (`admin_id`) REFERENCES admin(admin_id) ON DELETE CASCADE ON UPDATE CASCADE
+    `description` VARCHAR(255)
 );
 
 CREATE TABLE IF NOT EXISTS `super_smash_bros`.`articles`(
