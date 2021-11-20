@@ -18,6 +18,7 @@ import {
     Modes,
     Event_matches, Articles
 } from "./model"
+import {reject} from "bcrypt/promises";
 
 export class Dao{
     constructor(host, user, password, dbname) {
@@ -174,6 +175,29 @@ export class Dao{
             })
         })
     }
+
+    addCharacter(character){
+        return new Promise((resolve,reject)=>{
+            if(!character instanceof Character){
+                reject(MISMATCH_OBJ_TYPE)
+                return
+            }
+
+            const query = "INSERT INTO `character`(`name`, `attributes`, `description`) "+
+                "VALUES(?, ?, ?) "
+
+            this.mysqlConn.query(query, [character.name, character.attributes, character.description], (error,result)=>{
+                if(error){
+                    reject(error)
+                    return
+                }
+
+                character.character_id=result.insertId
+                resolve(character)
+            })
+        })
+    }
+
 
     retrieveArticles(){
         return new Promise((resolve, reject)=>{
