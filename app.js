@@ -179,6 +179,47 @@ app.post('/api/character/add',(req,res)=>{
     })
 })
 
+app.put('/api/character/update',(req,res)=>{
+    if(req.body.name === 'undefined' ||
+       req.body.attributes === 'undefined' ||
+       req.body.description === 'undefined' ||
+       req.body.character_id === 'undefined'){
+        res.status(400).send({
+            success:false,
+            error:WRONG_BODY_FORMAT
+        })
+        return
+    }
+
+    dao.retrieveOneCharacter(new Character(req.body.character_id)).then(characterResult=>{
+        dao.updateCharacter(new Character(req.body.character_id, req.body.name, req.body.attributes, req.body.description)).then(result=>{
+            res.status(200).send({
+                success:true,
+                result:result
+            })
+        }).catch(error=>{
+            console.error(error)
+            res.status(500).send({
+                success:false,
+                error:SOMETHING_WENT_WRONG
+            })
+        })
+    }).catch(error=>{
+        if(error === NO_SUCH_CONTENT){
+            res.status(204).send({
+                success:false,
+                error:NO_SUCH_CONTENT
+            })
+            return
+        }
+        console.error(error)
+        res.status(500).send({
+            success:false,
+            error:SOMETHING_WENT_WRONG
+        })
+    })
+})
+
 app.listen(PORT, ()=>{
     console.info(`Server serving port ${PORT}`)
 })
