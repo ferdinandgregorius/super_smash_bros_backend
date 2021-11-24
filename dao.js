@@ -242,7 +242,8 @@ export class Dao{
 
     retrieveArticles(){
         return new Promise((resolve, reject)=>{
-            const query = "SELECT * FROM articles "
+            const query = "SELECT a.title, a.description, a.date_created, u.username, " +
+                "FROM articles a LEFT OUTER JOIN user u ON a.user_id = u.user_id "
 
             this.mysqlConn.query(query, (error,result)=>{
                 if(error){
@@ -250,15 +251,14 @@ export class Dao{
                     return
                 }
 
-                let articles = []
-                for(let i = 0; i<result.length; i++){
-                    articles.push(new Articles(
-                        result[i].article_id,
-                        result[i].title,
-                        result[i].body,
-                        result[i].character_id
-                    ))
-                }
+                const articles = result.map(rowDataPacket=>{
+                    return{
+                        title:rowDataPacket.title,
+                        description:rowDataPacket.description,
+                        date_created:rowDataPacket.date_created,
+                        author:rowDataPacket.username
+                    }
+                })
 
                 resolve(articles)
             })
