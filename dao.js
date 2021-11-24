@@ -19,6 +19,7 @@ import {
     Event_matches, Articles
 } from "./model"
 import {reject} from "bcrypt/promises";
+import {resolve} from "path";
 
 export class Dao{
     constructor(host, user, password, dbname) {
@@ -246,6 +247,37 @@ export class Dao{
                 "FROM articles a LEFT OUTER JOIN user u ON a.user_id = u.user_id "
 
             this.mysqlConn.query(query, (error,result)=>{
+                if(error){
+                    reject(error)
+                    return
+                }
+
+                const articles = result.map(rowDataPacket=>{
+                    return{
+                        title:rowDataPacket.title,
+                        description:rowDataPacket.description,
+                        date_created:rowDataPacket.date_created,
+                        author:rowDataPacket.username
+                    }
+                })
+
+                resolve(articles)
+            })
+        })
+    }
+
+    retrieveOneArticle(article){
+        return new Promise((resolve,reject)=>{
+            if(!article instanceof Articles){
+                reject(MISMATCH_OBJ_TYPE)
+                return
+            }
+
+            const query = "SELECT a.title, a.description, a.date_created, u.username, " +
+                "FROM articles a LEFT OUTER JOIN user u ON a.user_id = u.user_id " +
+                "WHERE a.title=? "
+
+            this.mysqlConn.query(query,article.title,(error,result)=>{
                 if(error){
                     reject(error)
                     return
