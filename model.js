@@ -60,10 +60,12 @@ export class Event_matches{
 }
 
 export class Articles{
-    constructor(article_id, title, body, character_id) {
+    constructor(article_id, title, body, description, date_created, user_id) {
         this.article_id = article_id
         this.title = title
         this.body = body
-        this.character_id = character_id
+        this.description = description
+        this.date_created = date_created
+        this.user_id = user_id
     }
 }
