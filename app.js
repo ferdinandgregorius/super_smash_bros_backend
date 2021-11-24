@@ -154,6 +154,31 @@ app.get('/api/character/retrieve', (req,res)=>{
     }
 })
 
+app.post('/api/character/add',(req,res)=>{
+    if(req.body.name === 'undefined' ||
+       req.body.attributes === 'undefined' ||
+       req.body.description === 'undefined'){
+        res.status(400).send({
+            success:false,
+            error:WRONG_BODY_FORMAT
+        })
+        return
+    }
+
+    dao.addCharacter(new Character(null, req.body.name, req.body.attributes, req.body.description)).then(result=>{
+        res.status(200).send({
+            success:true,
+            result:result
+        })
+    }).catch(error=>{
+        console.error(error)
+        res.status(500).send({
+            success:false,
+            error:SOMETHING_WENT_WRONG
+        })
+    })
+})
+
 app.listen(PORT, ()=>{
     console.info(`Server serving port ${PORT}`)
 })

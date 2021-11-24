@@ -183,7 +183,7 @@ export class Dao{
                 return
             }
 
-            const query = "INSERT INTO `character`(`name`, `attributes`, `description`) "+
+            const query = "INSERT INTO `characters`(`name`, `attributes`, `description`) "+
                 "VALUES(?, ?, ?) "
 
             this.mysqlConn.query(query, [character.name, character.attributes, character.description], (error,result)=>{
@@ -227,7 +227,7 @@ export class Dao{
                 return
             }
 
-            const query = "DELETE FROM character WHERE character_id = ?"
+            const query = "DELETE FROM characters WHERE character_id = ?"
             this.mysqlConn.query(query, character.character_id, (error,result)=>{
 
                 if(error){
