@@ -63,7 +63,7 @@ const dbname = process.env.MY_SQL_DBNAME
 const dao = new Dao(host, user, password, dbname)
 
 app.post('/api/login',(req,res)=>{
-    if(req.body.username === 'undefined' || req.body.password === 'undefined'){
+    if(typeof req.body.username === 'undefined' || typeof req.body.password === 'undefined'){
         res.status(400).send({
             success:false,
             error:WRONG_BODY_FORMAT
@@ -95,7 +95,7 @@ app.post('/api/login',(req,res)=>{
 })
 
 app.post('/api/register',(req,res)=>{
-    if(req.body.username === 'undefined' || req.body.password === 'undefined'){
+    if(typeof req.body.username === 'undefined' || typeof req.body.password === 'undefined'){
         res.status(400).send({
             success: false,
             error: WRONG_BODY_FORMAT
@@ -118,7 +118,7 @@ app.post('/api/register',(req,res)=>{
 })
 
 app.get('/api/character/retrieve', (req,res)=>{
-    if(req.query.character_id === 'undefined'){
+    if(typeof req.query.character_id === 'undefined'){
         dao.retrieveCharacters().then(result=>{
             res.status(200).send({
                 success:true,
@@ -155,9 +155,9 @@ app.get('/api/character/retrieve', (req,res)=>{
 })
 
 app.post('/api/character/add',(req,res)=>{
-    if(req.body.name === 'undefined' ||
-       req.body.attributes === 'undefined' ||
-       req.body.description === 'undefined'){
+    if(typeof req.body.name === 'undefined' ||
+        typeof req.body.attributes === 'undefined' ||
+        typeof req.body.description === 'undefined'){
         res.status(400).send({
             success:false,
             error:WRONG_BODY_FORMAT
@@ -180,10 +180,10 @@ app.post('/api/character/add',(req,res)=>{
 })
 
 app.put('/api/character/update',(req,res)=>{
-    if(req.body.name === 'undefined' ||
-       req.body.attributes === 'undefined' ||
-       req.body.description === 'undefined' ||
-       req.body.character_id === 'undefined'){
+    if(typeof req.body.name === 'undefined' ||
+        typeof req.body.attributes === 'undefined' ||
+        typeof req.body.description === 'undefined' ||
+        typeof req.body.character_id === 'undefined'){
         res.status(400).send({
             success:false,
             error:WRONG_BODY_FORMAT
@@ -196,6 +196,44 @@ app.put('/api/character/update',(req,res)=>{
             res.status(200).send({
                 success:true,
                 result:result
+            })
+        }).catch(error=>{
+            console.error(error)
+            res.status(500).send({
+                success:false,
+                error:SOMETHING_WENT_WRONG
+            })
+        })
+    }).catch(error=>{
+        if(error === NO_SUCH_CONTENT){
+            res.status(204).send({
+                success:false,
+                error:NO_SUCH_CONTENT
+            })
+            return
+        }
+        console.error(error)
+        res.status(500).send({
+            success:false,
+            error:SOMETHING_WENT_WRONG
+        })
+    })
+})
+
+app.delete('/api/character/delete',(req,res)=>{
+    if(typeof req.query.character_id === 'undefined'){
+        res.status(400).send({
+            success:false,
+            error:WRONG_BODY_FORMAT
+        })
+        return
+    }
+
+    dao.retrieveOneCharacter(new Character(req.query.character_id)).then(result=>{
+        dao.deleteCharacter(new Character(req.query.character_id)).then(result=>{
+            res.status(200).send({
+                success:true,
+                result:SUCCESS
             })
         }).catch(error=>{
             console.error(error)
