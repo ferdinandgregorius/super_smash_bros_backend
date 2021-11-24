@@ -117,7 +117,42 @@ app.post('/api/register',(req,res)=>{
     })
 })
 
-
+app.get('/api/character/retrieve', (req,res)=>{
+    if(req.query.character_id === 'undefined'){
+        dao.retrieveCharacters().then(result=>{
+            res.status(200).send({
+                success:true,
+                result: result
+            })
+        }).catch(error=>{
+            console.error(error)
+            res.status(500).send({
+                success:false,
+                error:SOMETHING_WENT_WRONG
+            })
+        })
+    }else{
+        dao.retrieveOneCharacter(new Character(req.query.character_id)).then(result=>{
+            res.status(200).send({
+                success:true,
+                result:result
+            })
+        }).catch(error=>{
+            if(error === NO_SUCH_CONTENT){
+                res.status(204).send({
+                    success:false,
+                    error:NO_SUCH_CONTENT
+                })
+                return
+            }
+            console.error(error)
+            res.status(500).send({
+                success:false,
+                error:SOMETHING_WENT_WRONG
+            })
+        })
+    }
+})
 
 app.listen(PORT, ()=>{
     console.info(`Server serving port ${PORT}`)
