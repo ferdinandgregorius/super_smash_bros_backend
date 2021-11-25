@@ -146,6 +146,35 @@ export class Dao{
         })
     }
 
+    retrieveOneUser(user){
+        return new Promise((resolve,reject)=>{
+            if(!user instanceof User){
+                reject(MISMATCH_OBJ_TYPE)
+                return
+            }
+
+            const query = "SELECT * FROM user WHERE username = ?"
+
+            this.mysqlConn.query(query, user.username, (error,result)=>{
+                if(error){
+                    reject(error)
+                    return
+                }
+
+                const user = result.map(rowDataPacket=>{
+                    return{
+                        user_id:rowDataPacket.user_id,
+                        username:rowDataPacket.username,
+                        password:rowDataPacket.password,
+                        salt:rowDataPacket.salt
+                    }
+                })
+
+                resolve(user)
+            })
+        })
+    }
+
     retrieveCharacters(){
         return new Promise((resolve,reject)=>{
             const query = "SELECT * FROM characters "
