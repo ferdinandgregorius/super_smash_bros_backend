@@ -117,6 +117,8 @@ app.post('/api/register',(req,res)=>{
     })
 })
 
+
+
 app.get('/api/character/retrieve', (req,res)=>{
     if(typeof req.query.character_id === 'undefined'){
         dao.retrieveCharacters().then(result=>{

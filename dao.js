@@ -121,6 +121,31 @@ export class Dao{
         })
     }
 
+    retrieveUsers(){
+        return new Promise((resolve,reject)=>{
+            const query = "SELECT * FROM user "
+
+            this.mysqlConn.query(query, (error,result)=>{
+                if(error){
+                    reject(error)
+                    return
+                }
+
+                let users = []
+                for(let i =0; i<result.length; i++){
+                    users.push(new User(
+                        result[i].user_id,
+                        result[i].username,
+                        result[i].password,
+                        result[i].salt
+                    ))
+                }
+
+                resolve(users)
+            })
+        })
+    }
+
     retrieveCharacters(){
         return new Promise((resolve,reject)=>{
             const query = "SELECT * FROM characters "
