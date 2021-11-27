@@ -339,6 +339,7 @@ export class Dao{
 
                 const articles = result.map(rowDataPacket=>{
                     return{
+                        article_id:rowDataPacket.article_id,
                         title:rowDataPacket.title,
                         body:rowDataPacket.body,
                         description:rowDataPacket.description,
