@@ -28,7 +28,7 @@ import {
     Item,
     Stages,
     Modes,
-    Event_matches
+    Event_matches, Articles
 } from "./model"
 
 dotenv.config()
@@ -293,6 +293,43 @@ app.delete('/api/character/delete',(req,res)=>{
             error:SOMETHING_WENT_WRONG
         })
     })
+})
+
+app.get('/api/articles/retrieve',(req,res)=>{
+    if(typeof req.query.title === 'undefined'){
+        dao.retrieveArticles().then(result=>{
+            res.status(200).send({
+                success:true,
+                result:result
+            })
+        }).catch(error=>{
+            console.error(error)
+            res.status(500).send({
+                success:false,
+                error:SOMETHING_WENT_WRONG
+            })
+        })
+    }else{
+        dao.retrieveOneArticle(new Articles(null, req.query.title)).then(result=>{
+            res.status(200).send({
+                success:true,
+                result:result
+            })
+        }).catch(error=>{
+            if(error === NO_SUCH_CONTENT){
+                res.status(204).send({
+                    success:false,
+                    error:NO_SUCH_CONTENT
+                })
+                return
+            }
+            console.error(error)
+            res.status(500).send({
+                success:false,
+                error:SOMETHING_WENT_WRONG
+            })
+        })
+    }
 })
 
 app.listen(PORT, ()=>{
