@@ -331,7 +331,7 @@ export class Dao{
                 "FROM articles a LEFT OUTER JOIN user u ON a.user_id = u.user_id " +
                 "WHERE a.title=? "
 
-            this.mysqlConn.query(query,article.title,(error,result)=>{
+            this.mysqlConn.query(query, article.title, (error,result)=>{
                 if(error){
                     reject(error)
                     return
@@ -348,6 +348,27 @@ export class Dao{
                 })
 
                 resolve(articles)
+            })
+        })
+    }
+
+    addArticle(article){
+        return new Promise((resolve,reject)=>{
+            if(!article instanceof Articles){
+                reject(MISMATCH_OBJ_TYPE)
+                return
+            }
+
+            const query = "INSERT INTO `articles`(`title`, `body`, `description`, `date_created`, `user_id`) " +
+                "VALUES(?, ?, ?, ?, ?) "
+            this.mysqlConn.query(query, [article.title, article.body, article.description, article.date_created, article.user_id], (error, result)=>{
+                if(error){
+                    reject(error)
+                    return
+                }
+
+                article.article_id = result.insertId
+                resolve(article)
             })
         })
     }
