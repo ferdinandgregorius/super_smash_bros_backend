@@ -361,8 +361,8 @@ export class Dao{
             }
 
             const query = "INSERT INTO `articles`(`title`, `body`, `description`, `date_created`, `user_id`) " +
-                "VALUES(?, ?, ?, ?, ?) "
-            this.mysqlConn.query(query, [article.title, article.body, article.description, article.date_created, article.user_id], (error, result)=>{
+                "VALUES(?, ?, ?, NOW(), ?) "
+            this.mysqlConn.query(query, [article.title, article.body, article.description, article.user_id], (error, result)=>{
                 if(error){
                     reject(error)
                     return
