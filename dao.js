@@ -320,6 +320,38 @@ export class Dao{
         })
     }
 
+    retrieveArticlesByUser(user) {
+        return new Promise((resolve,reject)=>{
+            console.log(user)
+            if(!user instanceof User){
+                reject(MISMATCH_OBJ_TYPE)
+                return
+            }
+
+            const query = "SELECT a.title, a.description, a.date_created, u.username " +
+            "FROM articles a LEFT OUTER JOIN user u ON a.user_id = u.user_id " +
+            "WHERE u.username=?"
+
+            this.mysqlConn.query(query, user.username, (error,result)=>{
+                if(error){
+                    reject(error)
+                    return
+                }
+
+                const articles = result.map(rowDataPacket=> {
+                    return {
+                        title:rowDataPacket.title,
+                        description:rowDataPacket.description,
+                        date_created:rowDataPacket.date_created,
+                        author:rowDataPacket.username
+                    }
+                })
+
+                resolve(articles)
+            })
+        })
+    }
+
     retrieveOneArticle(article){
         return new Promise((resolve,reject)=>{
             if(!article instanceof Articles){

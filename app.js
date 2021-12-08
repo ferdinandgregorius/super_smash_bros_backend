@@ -6,6 +6,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import {Dao} from './dao'
+import jwt from 'jsonwebtoken';
 
 import {
     ERROR_DUPLICATE_ENTRY,
@@ -30,6 +31,7 @@ import {
     Modes,
     Event_matches, Articles
 } from "./model"
+import { off } from 'process';
 
 dotenv.config()
 
@@ -62,8 +64,25 @@ const password = typeof process.env.MY_SQL_PASSWORD === 'undefined' ? '' : proce
 const dbname = process.env.MY_SQL_DBNAME
 const dao = new Dao(host, user, password, dbname)
 
-app.post('/api/login',(req,res)=>{
-    if(typeof req.body.username === 'undefined' || typeof req.body.password === 'undefined'){
+function authenticateToken(req, res, next) {
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
+
+    console.log(token)
+    if(token == null) return res.status(401).send({message: 'Token not sent'})
+
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+        if(err) return res.status(403).send({message: "User doesn't have access"})
+        req.jwtuser = user
+        console.log(user)
+        console.log(req.jwtuser)
+        next()
+    })
+    
+}
+
+app.post('/api/login', (req,res)=>{
+    if(typeof req.body.username === 'undefined' || typeof req.body.password === 'undefined'){        
         res.status(400).send({
             success:false,
             error:WRONG_BODY_FORMAT
@@ -72,9 +91,13 @@ app.post('/api/login',(req,res)=>{
     }
 
     dao.login(req.body.username, req.body.password).then(result=>{
+        const user = { username: req.body.username }
+        const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET)
+
         res.status(200).send({
             success: true,
             result: result,
+            accessToken: accessToken,
             message: "Authentication Successful"
         })
     }).catch(error=>{
@@ -295,7 +318,31 @@ app.delete('/api/character/delete',(req,res)=>{
     })
 })
 
-app.get('/api/articles/retrieve',(req,res)=>{
+//for testing jwt
+app.get('/api/articles/retrievebyuser', authenticateToken, (req,res)=>{
+    console.log(req.query)
+    dao.retrieveArticlesByUser(new User(null, req.jwtuser.username)).then(result=> {
+        res.status(200).send({
+            success:true,
+            result: result
+        })
+    }).catch(error=>{
+        if(error === NO_SUCH_CONTENT){
+            res.status(204).send({
+                success:false,
+                error:NO_SUCH_CONTENT
+            })
+            return
+        }
+        console.error(error)
+        res.status(500).send({
+            success:false,
+            error:SOMETHING_WENT_WRONG
+        })
+    })
+})
+
+app.get('/api/articles/retrieve', authenticateToken, (req,res)=>{
     if(typeof req.query.title === 'undefined'){
         dao.retrieveArticles().then(result=>{
             res.status(200).send({
