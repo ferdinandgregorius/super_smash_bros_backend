@@ -364,18 +364,22 @@ export class Dao{
                 if(error){
                     reject(error)
                     return
+                }else if(result.length<1){
+                    error=NO_SUCH_CONTENT
+                    reject(error)
+                }else{
+                    const articles = result.map(rowDataPacket=> {
+                        return {
+                            title:rowDataPacket.title,
+                            description:rowDataPacket.description,
+                            date_created:rowDataPacket.date_created,
+                            author:rowDataPacket.username
+                        }
+                    })
+
+                    resolve(articles)
                 }
 
-                const articles = result.map(rowDataPacket=> {
-                    return {
-                        title:rowDataPacket.title,
-                        description:rowDataPacket.description,
-                        date_created:rowDataPacket.date_created,
-                        author:rowDataPacket.username
-                    }
-                })
-
-                resolve(articles)
             })
         })
     }

@@ -446,7 +446,43 @@ app.put('/api/article/update', (req,res)=>{
     })
 })
 
+app.delete('/api/article/delete',(req,res)=>{
+    if(typeof req.query.article_id==='undefined'){
+        res.status(400).send({
+            success:false,
+            error:WRONG_BODY_FORMAT
+        })
+        return
+    }
 
+    dao.retrieveArticleById(new Articles(req.query.article_id)).then(result=>{
+        dao.deleteArticle(new Articles(req.query.article_id)).then(result=>{
+            res.status(200).send({
+                success:true,
+                result:SUCCESS
+            })
+        }).catch(error=>{
+            console.error(error)
+            res.status(500).send({
+                success:false,
+                error:SOMETHING_WENT_WRONG
+            })
+        })
+    }).catch(error=>{
+        if(error===NO_SUCH_CONTENT){
+            res.status(204).send({
+                success:false,
+                error:NO_SUCH_CONTENT
+            })
+            return
+        }
+        console.error(error)
+        res.status(500).send({
+            success:false,
+            error:SOMETHING_WENT_WRONG
+        })
+    })
+})
 
 app.listen(PORT, ()=>{
     console.info(`Server serving port ${PORT}`)
