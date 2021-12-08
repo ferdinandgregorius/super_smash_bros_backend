@@ -213,20 +213,22 @@ export class Dao{
             this.mysqlConn.query(query, character.character_id, (error,result)=>{
                 if(error){
                     reject(error)
-                    return
-                }
+                }else if(result.length<1){
+                    error=NO_SUCH_CONTENT
+                    reject(error)
+                }else{
+                    let characters = []
+                    for(let i =0; i<result.length; i++){
+                        characters.push(new Character(
+                            result[i].character_id,
+                            result[i].name,
+                            result[i].attributes,
+                            result[i].description
+                        ))
+                    }
 
-                let characters = []
-                for(let i =0; i<result.length; i++){
-                    characters.push(new Character(
-                        result[i].character_id,
-                        result[i].name,
-                        result[i].attributes,
-                        result[i].description
-                    ))
+                    resolve(characters)
                 }
-
-                resolve(characters)
             })
         })
     }
