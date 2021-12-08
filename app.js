@@ -332,6 +332,38 @@ app.get('/api/articles/retrieve',(req,res)=>{
     }
 })
 
+app.get('/api/articles/retrievebyuser', (req,res)=>{
+    //console.log(req.query)
+
+    if(typeof req.query.username==='undefined'){
+        res.status(400).send({
+            success:false,
+            error:WRONG_BODY_FORMAT
+        })
+        return
+    }
+
+    dao.retrieveArticlesByUser(new User(null, req.query.username)).then(result=> {
+        res.status(200).send({
+            success:true,
+            result: result
+        })
+    }).catch(error=>{
+        if(error === NO_SUCH_CONTENT){
+            res.status(204).send({
+                success:false,
+                error:NO_SUCH_CONTENT
+            })
+            return
+        }
+        console.error(error)
+        res.status(500).send({
+            success:false,
+            error:SOMETHING_WENT_WRONG
+        })
+    })
+})
+
 app.post('/api/articles/add',(req,res)=>{
     if(typeof req.body.title === 'undefined' ||
        typeof req.body.body === 'undefined' ||
@@ -362,6 +394,47 @@ app.post('/api/articles/add',(req,res)=>{
             res.status(204).send({
                 success: false,
                 error: NO_SUCH_CONTENT
+            })
+            return
+        }
+        console.error(error)
+        res.status(500).send({
+            success: false,
+            error: SOMETHING_WENT_WRONG
+        })
+    })
+})
+
+app.put('/api/article/update', (req,res)=>{
+    if(typeof req.body.article_id === 'undefined' ||
+        typeof req.body.title === 'undefined' ||
+        typeof req.body.body === 'undefined' ||
+        typeof req.body.description === 'undefined'){
+        res.status(400).send({
+            success: false,
+            error: WRONG_BODY_FORMAT
+        })
+        return
+    }
+
+    dao.retrieveArticleById(new Articles(req.body.article_id)).then(articleResult=>{
+        dao.updateArticle(new Articles(req.body.article_id, req.body.title, req.body.body, req.body.description, null,null)).then(result=>{
+            res.status(200).send({
+                success:true,
+                result:result
+            })
+        }).catch(error=>{
+            console.error(error)
+            res.status(500).send({
+                success:false,
+                error:SOMETHING_WENT_WRONG
+            })
+        })
+    }).catch(error=>{
+        if(error === NO_SUCH_CONTENT){
+            res.status(204).send({
+                success:false,
+                error:NO_SUCH_CONTENT
             })
             return
         }
