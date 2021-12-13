@@ -1,6 +1,8 @@
 import fs from 'fs';
 //import https from 'https';
 import  http from 'http';
+import multer from 'multer';
+import path from 'path';
 import bodyParser from "body-parser";
 import express from 'express';
 import dotenv from 'dotenv';
@@ -61,6 +63,20 @@ const user = process.env.MY_SQL_USER
 const password = typeof process.env.MY_SQL_PASSWORD === 'undefined' ? '' : process.env.MY_SQL_PASSWORD
 const dbname = process.env.MY_SQL_DBNAME
 const dao = new Dao(host, user, password, dbname)
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb){
+        cb(null, './Uploads/'+'Uncompressed');
+    },
+    filename: function (req, file, cb){
+        const originalFileName = file.originalname
+        let fileExtension = originalFileName.split(".")
+        fileExtension = fileExtension[fileExtension.length-1]
+        cb(null, file.filename + '-' + Date.now() + path.extname(file.originalname))
+    }
+})
+
+const upload = multer({storage:storage})
 
 app.post('/api/login',(req,res)=>{
     if(typeof req.body.username === 'undefined' || typeof req.body.password === 'undefined'){
