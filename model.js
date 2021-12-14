@@ -18,11 +18,12 @@ export class Admin{
 }
 
 export class Character{
-    constructor(character_id, name, attributes, description) {
+    constructor(character_id, name, attributes, description, character_picture) {
         this.character_id = character_id
         this.name = name
         this.attributes = attributes
         this.description = description
+        this.character_picutre = character_picture
     }
 }
 
