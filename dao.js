@@ -240,10 +240,10 @@ export class Dao{
                 return
             }
 
-            const query = "INSERT INTO `characters`(`name`, `attributes`, `description`) "+
-                "VALUES(?, ?, ?) "
+            const query = "INSERT INTO `characters`(`name`, `attributes`, `description`, `character_picture`) "+
+                "VALUES(?, ?, ?, ?) "
 
-            this.mysqlConn.query(query, [character.name, character.attributes, character.description], (error,result)=>{
+            this.mysqlConn.query(query, [character.name, character.attributes, character.description, character.character_picture], (error,result)=>{
                 if(error){
                     reject(error)
                     return

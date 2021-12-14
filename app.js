@@ -66,26 +66,27 @@ const dao = new Dao(host, user, password, dbname)
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb){
-        cb(null, './Uploads/'+'Uncompressed');
+        cb(null, './Uploads/');
     },
     filename: function (req, file, cb){
         const originalFileName = file.originalname
         let fileExtension = originalFileName.split(".")
         fileExtension = fileExtension[fileExtension.length-1]
-        cb(null, file.filename + '-' + Date.now() + path.extname(file.originalname))
+        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
     }
 })
 
-const imageFileFilter = (req, file, cb)=>{
-    //Filter to only accept certain file types
-    if(!file.originalname.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF|doc|docx|pdf|txt|xls|csv|xlsx)$/)){
-        req.fileValidationError = 'Please upload jpg, png, gif, doc, pdf, txt, xls, or csv file types.';
-        return cb(new Error('Please upload jpg, png, gif, doc, pdf, txt, xls, or csv file types.'), false);
-    }
-    cb(null, true);
-}
+// const imageFileFilter = (req, file, cb)=>{
+//     //Filter to only accept certain file types
+//     if(!file.originalname.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF|doc|docx|pdf|txt|xls|csv|xlsx)$/)){
+//         req.fileValidationError = 'Please upload jpg, png, gif, doc, pdf, txt, xls, or csv file types.';
+//         return cb(new Error('Please upload jpg, png, gif, doc, pdf, txt, xls, or csv file types.'), false);
+//     }
+//     cb(null, true);
+// }
 
-const upload = multer({storage:storage, fileFilter: imageFileFilter})
+//const upload = multer({storage:storage, fileFilter: imageFileFilter})
+const upload = multer({storage:storage})
 
 app.post('/api/login',(req,res)=>{
     if(typeof req.body.username === 'undefined' || typeof req.body.password === 'undefined'){
@@ -216,7 +217,7 @@ app.get('/api/character/retrieve', (req,res)=>{
     }
 })
 
-app.post('/api/character/add',(req,res)=>{
+app.post('/api/character/add', upload.single("character_image"),(req,res)=>{
     if(typeof req.body.name === 'undefined' ||
         typeof req.body.attributes === 'undefined' ||
         typeof req.body.description === 'undefined'){
@@ -227,7 +228,15 @@ app.post('/api/character/add',(req,res)=>{
         return
     }
 
-    dao.addCharacter(new Character(null, req.body.name, req.body.attributes, req.body.description)).then(result=>{
+    let character
+
+    if(typeof req.file==='undefined'){
+        character = new Character(null, req.body.name, req.body.attributes, req.body.description, null)
+    }else{
+        character = new Character(null, req.body.name, req.body.attributes, req.body.description, req.file.filename)
+    }
+
+    dao.addCharacter(character).then(result=>{
         res.status(200).send({
             success:true,
             result:result

@@ -23,7 +23,7 @@ export class Character{
         this.name = name
         this.attributes = attributes
         this.description = description
-        this.character_picutre = character_picture
+        this.character_picture = character_picture
     }
 }
 
