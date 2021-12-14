@@ -223,7 +223,8 @@ export class Dao{
                             result[i].character_id,
                             result[i].name,
                             result[i].attributes,
-                            result[i].description
+                            result[i].description,
+                            result[i].character_picture
                         ))
                     }
 

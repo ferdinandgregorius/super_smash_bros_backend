@@ -63,6 +63,7 @@ const user = process.env.MY_SQL_USER
 const password = typeof process.env.MY_SQL_PASSWORD === 'undefined' ? '' : process.env.MY_SQL_PASSWORD
 const dbname = process.env.MY_SQL_DBNAME
 const dao = new Dao(host, user, password, dbname)
+const UPLOADPATH = process.env.UPLOAD_PATH
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb){
@@ -300,8 +301,20 @@ app.delete('/api/character/delete',(req,res)=>{
         return
     }
 
-    dao.retrieveOneCharacter(new Character(req.query.character_id)).then(result=>{
+    dao.retrieveOneCharacter(new Character(req.query.character_id)).then(characterResult=>{
         dao.deleteCharacter(new Character(req.query.character_id)).then(result=>{
+            if(characterResult[0].character_picture != null){
+                const filePath = UPLOADPATH+characterResult[0].character_picture
+                fs.unlinkSync(filePath)
+
+                res.status(200).send({
+                    success:true,
+                    result:SUCCESS
+                })
+
+                return
+            }
+
             res.status(200).send({
                 success:true,
                 result:SUCCESS
