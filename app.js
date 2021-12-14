@@ -76,7 +76,16 @@ const storage = multer.diskStorage({
     }
 })
 
-const upload = multer({storage:storage})
+const imageFileFilter = (req, file, cb)=>{
+    //Filter to only accept certain file types
+    if(!file.originalname.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF|doc|docx|pdf|txt|xls|csv|xlsx)$/)){
+        req.fileValidationError = 'Please upload jpg, png, gif, doc, pdf, txt, xls, or csv file types.';
+        return cb(new Error('Please upload jpg, png, gif, doc, pdf, txt, xls, or csv file types.'), false);
+    }
+    cb(null, true);
+}
+
+const upload = multer({storage:storage, fileFilter: imageFileFilter})
 
 app.post('/api/login',(req,res)=>{
     if(typeof req.body.username === 'undefined' || typeof req.body.password === 'undefined'){
