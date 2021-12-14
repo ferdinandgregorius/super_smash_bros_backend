@@ -366,6 +366,36 @@ app.get('/api/articles/retrieve',(req,res)=>{
     }
 })
 
+app.post('/api/articles/retrieve/one', (req,res)=>{
+    if(typeof req.body.title === 'undefined'){
+        res.status(400).send({
+            success:false,
+            error:WRONG_BODY_FORMAT
+        })
+        return
+    }
+
+    dao.retrieveOneArticle(new Articles(null, req.body.title)).then(result=>{
+        res.status(200).send({
+            success:true,
+            result:result
+        })
+    }).catch(error=>{
+        if(error === NO_SUCH_CONTENT){
+            res.status(204).send({
+                success:false,
+                error:NO_SUCH_CONTENT
+            })
+            return
+        }
+        console.error(error)
+        res.status(500).send({
+            success:false,
+            error:SOMETHING_WENT_WRONG
+        })
+    })
+})
+
 app.get('/api/articles/retrievebyuser', (req,res)=>{
     //console.log(req.query)
 
