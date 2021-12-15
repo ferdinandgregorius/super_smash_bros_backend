@@ -251,7 +251,7 @@ app.post('/api/character/add', upload.single("character_image"),(req,res)=>{
     })
 })
 
-app.put('/api/character/update',(req,res)=>{
+app.put('/api/character/update', upload.single('character_image'),(req,res)=>{
     if(typeof req.body.name === 'undefined' ||
         typeof req.body.attributes === 'undefined' ||
         typeof req.body.description === 'undefined' ||
@@ -263,8 +263,20 @@ app.put('/api/character/update',(req,res)=>{
         return
     }
 
+    let character
+
+    if(typeof req.file === 'undefined'){
+        character = new Character(req.body.character_id, req.body.name, req.body.attributes, req.body.description, null)
+    }else{
+        character = new Character(req.body.character_id, req.body.name, req.body.attributes, req.body.description, req.file.filename)
+    }
+
     dao.retrieveOneCharacter(new Character(req.body.character_id)).then(characterResult=>{
-        dao.updateCharacter(new Character(req.body.character_id, req.body.name, req.body.attributes, req.body.description)).then(result=>{
+        if(characterResult[0].character_picture != null){
+            fs.unlinkSync(UPLOADPATH+characterResult[0].character_picture)
+        }
+
+        dao.updateCharacter(character).then(result=>{
             res.status(200).send({
                 success:true,
                 result:result
