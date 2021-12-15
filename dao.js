@@ -263,10 +263,10 @@ export class Dao{
                 return
             }
 
-            const query = "UPDATE characters SET name = ?, attributes = ?, description = ? " +
+            const query = "UPDATE characters SET name = ?, attributes = ?, description = ?, character_picture = ? " +
                 "WHERE character_id = ?"
             this.mysqlConn.query(query, [character.name, character.attributes,
-                character.description, character.character_id], (error,result)=>{
+                character.description, character.character_picture, character.character_id], (error,result)=>{
 
                 if(error){
                     reject(error)
