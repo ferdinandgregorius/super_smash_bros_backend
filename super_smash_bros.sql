@@ -23,7 +23,8 @@ CREATE TABLE IF NOT EXISTS `super_smash_bros`.`characters`(
     `character_id` INT(7) PRIMARY KEY AUTO_INCREMENT,
     `name` VARCHAR(255),
     `attributes` VARCHAR(255),
-    `description` VARCHAR(255)
+    `description` VARCHAR(255),
+    `character_picture` LONGTEXT
 );
 
 CREATE TABLE IF NOT EXISTS `super_smash_bros`.`item`(
