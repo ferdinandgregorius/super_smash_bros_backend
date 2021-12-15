@@ -390,6 +390,25 @@ export class Dao{
         })
     }
 
+    deleteItem(item){
+        return new Promise((resolve,reject)=>{
+            if(!item instanceof Item){
+                reject(MISMATCH_OBJ_TYPE)
+                return
+            }
+
+            const query = "DELETE FROM item WHERE item_id = ? "
+            this.mysqlConn.query(query, item.item_id, (error, result)=>{
+                if(error){
+                    reject(error)
+                    return
+                }
+
+                resolve(SUCCESS)
+            })
+        })
+    }
+
     retrieveArticles(){
         return new Promise((resolve, reject)=>{
             const query = "SELECT a.title, a.description, a.date_created, u.username " +
