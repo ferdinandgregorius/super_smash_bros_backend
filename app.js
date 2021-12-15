@@ -524,7 +524,7 @@ app.put('/api/article/update', (req,res)=>{
 })
 
 app.delete('/api/article/delete',(req,res)=>{
-    if(typeof req.query.article_id==='undefined'){
+    if(typeof req.body.article_id==='undefined'){
         res.status(400).send({
             success:false,
             error:WRONG_BODY_FORMAT
@@ -532,8 +532,8 @@ app.delete('/api/article/delete',(req,res)=>{
         return
     }
 
-    dao.retrieveArticleById(new Articles(req.query.article_id)).then(result=>{
-        dao.deleteArticle(new Articles(req.query.article_id)).then(result=>{
+    dao.retrieveArticleById(new Articles(req.body.article_id)).then(result=>{
+        dao.deleteArticle(new Articles(req.body.article_id)).then(result=>{
             res.status(200).send({
                 success:true,
                 result:SUCCESS
