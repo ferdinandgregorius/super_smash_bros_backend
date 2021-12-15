@@ -351,6 +351,26 @@ export class Dao{
         })
     }
 
+    addItem(item){
+        return new Promise((resolve,reject)=>{
+            if(!item instanceof Item){
+                reject(MISMATCH_OBJ_TYPE)
+                return
+            }
+
+            const query = "INSERT INTO `item`(`name`, `description`) VALUES(?, ?) "
+            this.mysqlConn.query(query, [item.name, item.description], (error, result)=>{
+                if(error){
+                    reject(error)
+                    return
+                }
+
+                item.item_id = result.insertId
+                resolve(item)
+            })
+        })
+    }
+
     retrieveArticles(){
         return new Promise((resolve, reject)=>{
             const query = "SELECT a.title, a.description, a.date_created, u.username " +
