@@ -448,7 +448,7 @@ export class Dao{
                 return
             }
 
-            const query = "UPDATE articles SET title = ?, body = ?, description = ?, date_created = NOW() WHERE article_id = ? "
+            const query = "UPDATE articles SET title = ?, body = ?, description = ? WHERE article_id = ? "
             this.mysqlConn.query(query, [article.title, article.body, article.description, article.article_id], (error,result)=>{
                 if(error){
                     reject(error)
