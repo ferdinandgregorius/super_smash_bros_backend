@@ -298,6 +298,30 @@ export class Dao{
         })
     }
 
+    retrieveItems(){
+        return new Promise((resolve,reject)=>{
+            const query = "SELECT * FROM item "
+            this.mysqlConn.query(query, (error, result)=>{
+                if(error){
+                    reject(error)
+                    return
+                }
+
+                let items = []
+
+                for(let i = 0; i<result.length; i++){
+                    items.push(new Item(
+                        result[i].item_id,
+                        result[i].name,
+                        result[i].description
+                    ))
+                }
+
+                resolve(items)
+            })
+        })
+    }
+
     retrieveArticles(){
         return new Promise((resolve, reject)=>{
             const query = "SELECT a.title, a.description, a.date_created, u.username " +
