@@ -487,6 +487,7 @@ export class Dao{
                             title:rowDataPacket.title,
                             description:rowDataPacket.description,
                             date_created:rowDataPacket.date_created,
+                            article_picture:rowDataPacket.article_picture,
                             author:rowDataPacket.username
                         }
                     })
@@ -559,8 +560,8 @@ export class Dao{
                 return
             }
 
-            const query = "UPDATE articles SET title = ?, body = ?, description = ? WHERE article_id = ? "
-            this.mysqlConn.query(query, [article.title, article.body, article.description, article.article_id], (error,result)=>{
+            const query = "UPDATE articles SET title = ?, body = ?, description = ?, article_picture = ? WHERE article_id = ? "
+            this.mysqlConn.query(query, [article.title, article.body, article.description, article.article_picture, article.article_id], (error,result)=>{
                 if(error){
                     reject(error)
                     return
