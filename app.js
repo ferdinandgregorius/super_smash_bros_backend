@@ -5,7 +5,9 @@ import bodyParser from "body-parser";
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import {Dao} from './dao'
+import {Dao} from './dao';
+import cookieParser from 'cookie-parser';
+import {check, validationResult} from 'express-validator';
 
 import {
     ERROR_DUPLICATE_ENTRY,
@@ -36,6 +38,7 @@ dotenv.config()
 const app = express()
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(express.json())
+app.use(cookieParser());
 
 app.use(cors())
 app.use((err, req, res, next)=>{
@@ -62,7 +65,22 @@ const password = typeof process.env.MY_SQL_PASSWORD === 'undefined' ? '' : proce
 const dbname = process.env.MY_SQL_DBNAME
 const dao = new Dao(host, user, password, dbname)
 
-app.post('/api/login',(req,res)=>{
+function validateCookie(req, res, next){
+    const{ cookies } = req;
+    console.log("cookie");
+    console.log(cookies);
+    console.log("cookies");
+    if('username' in cookies) {
+        console.log("Cookies: " + cookies)
+        console.log('Username Exists.');
+        if(cookies.username) {next(); console.log("existed")}
+        else res.status(403).send({msg: 'Not Authenticated'}) 
+    } else {
+        res.status(403).send({msg: 'Not Authenticated'}) 
+    }
+}
+
+app.post('/api/login', (req,res)=>{
     if(typeof req.body.username === 'undefined' || typeof req.body.password === 'undefined'){
         res.status(400).send({
             success:false,
@@ -71,7 +89,16 @@ app.post('/api/login',(req,res)=>{
         return
     }
 
+    // res.cookie('session_id', '12345');
     dao.login(req.body.username, req.body.password).then(result=>{
+        // res.cookie('username', req.body.username, {maxAge:3600000, httpOnly: true})
+        res.cookie('username', req.body.username, {maxAge:600000})// 10mnt
+
+        console.log("loggedin")
+        console.log(req.body)
+        console.log(req.cookies)
+        console.log(req.headers.cookie)
+
         res.status(200).send({
             success: true,
             result: result,
@@ -94,7 +121,22 @@ app.post('/api/login',(req,res)=>{
     })
 })
 
+app.post('/api/logout', (req,res)=>{ 
+    res.clearCookie('username')
+    res.status(200).send({
+        success: true,
+        message: "Logged Out!"
+    })
+})
+
 app.post('/api/register',(req,res)=>{
+
+    const errors = validationResult(req);
+    console.log(errors);
+    if(!errors.isEmpty()) {
+        return res.status(400).json({errors: errors.array()});
+    }
+
     if(typeof req.body.username === 'undefined' || typeof req.body.password === 'undefined'){
         res.status(400).send({
             success: false,
@@ -117,7 +159,7 @@ app.post('/api/register',(req,res)=>{
     })
 })
 
-app.get('/api/user/retrieve', (req,res)=>{
+app.get('/api/user/retrieve', validateCookie, (req,res)=>{
     if(typeof req.query.username === 'undefined'){
         dao.retrieveUsers().then(result=>{
             res.status(200).send({
@@ -309,7 +351,7 @@ app.get('/api/articles/retrieve',(req,res)=>{
                 error:SOMETHING_WENT_WRONG
             })
         })
-    }else{
+    } else {
         dao.retrieveOneArticle(new Articles(null, req.query.title)).then(result=>{
             res.status(200).send({
                 success:true,
@@ -376,6 +418,7 @@ app.post('/api/articles/add',(req,res)=>{
         return
     }
 
+    console.log(req.body)
     dao.retrieveOneUser(new User(null, req.body.username)).then(userResult=>{
         dao.addArticle(new Articles(null, req.body.title, req.body.body, req.body.description, null, userResult[0].user_id)).then(result=>{
             res.status(200).send({
