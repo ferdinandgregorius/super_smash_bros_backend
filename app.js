@@ -466,7 +466,16 @@ app.post('/api/articles/add', upload.single('article_image'),(req,res)=>{
     }
 
     dao.retrieveOneUser(new User(null, req.body.username)).then(userResult=>{
-        dao.addArticle(new Articles(null, req.body.title, req.body.body, req.body.description, null, userResult[0].user_id)).then(result=>{
+
+        let article
+
+        if(typeof req.file === 'undefined'){
+            article = new Articles(null, req.body.title, req.body.body, req.body.description, null, null, userResult[0].user_id)
+        }else{
+            article = new Articles(null, req.body.title, req.body.body, req.body.description, req.file.filename, null, userResult[0].user_id)
+        }
+
+        dao.addArticle(article).then(result=>{
             res.status(200).send({
                 success: true,
                 result: result
