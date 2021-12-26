@@ -453,7 +453,7 @@ app.get('/api/articles/retrievebyuser', (req,res)=>{
     })
 })
 
-app.post('/api/articles/add',(req,res)=>{
+app.post('/api/articles/add', upload.single('article_image'),(req,res)=>{
     if(typeof req.body.title === 'undefined' ||
        typeof req.body.body === 'undefined' ||
        typeof req.body.description === 'undefined' ||
