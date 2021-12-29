@@ -58,6 +58,7 @@ CREATE TABLE IF NOT EXISTS `super_smash_bros`.`articles`(
     `body` VARCHAR(1000),
     `description` VARCHAR(255),
     `date_created` datetime,
+    `article_picture` LONGTEXT,
     `user_id` INT(7),
     CONSTRAINT `fk_user_id` FOREIGN KEY (`user_id`) REFERENCES user(user_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
