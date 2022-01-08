@@ -532,6 +532,25 @@ export class Dao{
         })
     }
 
+    retrieveArticleImage(article){
+        return new Promise((resolve,reject)=>{
+            if(!article instanceof Articles){
+                reject(MISMATCH_OBJ_TYPE)
+                return
+            }
+
+            const query = "SELECT article_picture FROM articles WHERE article_id = ?"
+            this.mysqlConn.query(query, article.article_id, (error,result)=>{
+                if(error){
+                    reject(error)
+                    return
+                }
+
+                resolve(result)
+            })
+        })
+    }
+
     addArticle(article){
         return new Promise((resolve,reject)=>{
             if(!article instanceof Articles){
