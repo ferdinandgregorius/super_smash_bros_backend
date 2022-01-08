@@ -468,7 +468,7 @@ app.post('/api/articles/add', upload.single('article_image'),(req,res)=>{
     dao.retrieveOneUser(new User(null, req.body.username)).then(userResult=>{
 
         let article
-        const bodyJSON = JSON.parse(JSON.stringify(req.body.body))
+        const bodyJSON = JSON.stringify(req.body.body)
 
         if(typeof req.file === 'undefined'){
             article = new Articles(null, req.body.title, bodyJSON, req.body.description, null, null, userResult[0].user_id)
