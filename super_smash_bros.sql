@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS `super_smash_bros`.`event_matches`(
 CREATE TABLE IF NOT EXISTS `super_smash_bros`.`articles`(
     `article_id` INT(7) PRIMARY KEY AUTO_INCREMENT,
     `title` VARCHAR(60),
-    `body` VARCHAR(1000),
+    `body` LONGTEXT,
     `description` VARCHAR(255),
     `date_created` datetime,
     `article_picture` LONGTEXT,
