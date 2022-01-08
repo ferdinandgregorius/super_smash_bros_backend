@@ -517,11 +517,12 @@ app.put('/api/article/update', upload.single('article_image'), (req,res)=>{
     }
 
     let article
+    const bodyJSON = JSON.stringify(req.body.body)
 
     if(typeof req.file === 'undefined'){
-        article = new Articles(req.body.article_id, req.body.title, req.body.body, req.body.description, null, null)
+        article = new Articles(req.body.article_id, req.body.title, bodyJSON, req.body.description, null, null)
     }else{
-        article = new Articles(req.body.article_id, req.body.title, req.body.body, req.body.description, req.file.filename, null)
+        article = new Articles(req.body.article_id, req.body.title, bodyJSON, req.body.description, req.file.filename, null)
     }
 
     dao.retrieveArticleById(new Articles(req.body.article_id)).then(articleResult=>{
