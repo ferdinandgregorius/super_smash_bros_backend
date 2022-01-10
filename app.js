@@ -527,8 +527,8 @@ app.put('/api/article/update', upload.single('article_image'), (req,res)=>{
 
     dao.retrieveArticleById(new Articles(req.body.article_id)).then(articleResult=>{
 
-        if(articleResult[0].article_picture != null){
-            fs.unlinkSync(UPLOADPATH+articleResult[0].article_picture)
+        if(articleResult[0].article_image != null){
+            fs.unlinkSync(UPLOADPATH+articleResult[0].article_image)
         }
 
         dao.updateArticle(article).then(result=>{
