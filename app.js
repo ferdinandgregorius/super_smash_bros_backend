@@ -530,26 +530,42 @@ app.put('/api/article/update', (req,res)=>{
     let article
     const bodyJSON = JSON.stringify(req.body.body)
 
-    if(typeof req.body.article_image === 'undefined'){
-        article = new Articles(null, req.body.title, bodyJSON, req.body.description, null, null, userResult[0].user_id)
-    }else{
-        article = new Articles(null, req.body.title, bodyJSON, req.body.description, req.body.article_image, null, userResult[0].user_id)
-    }
-
     dao.retrieveArticleById(new Articles(req.body.article_id)).then(articleResult=>{
 
-        dao.updateArticle(article).then(result=>{
-            res.status(200).send({
-                success:true,
-                result:result
+        dao.retrieveOneUser(new User(null, articleResult[0].username)).then(userResult=>{
+            if(typeof req.body.article_image === 'undefined'){
+                article = new Articles(null, req.body.title, bodyJSON, req.body.description, null, null, userResult[0].user_id)
+            }else{
+                article = new Articles(null, req.body.title, bodyJSON, req.body.description, req.body.article_image, null, userResult[0].user_id)
+            }
+
+            dao.updateArticle(article).then(result=>{
+                res.status(200).send({
+                    success:true,
+                    result:result
+                })
+            }).catch(error=>{
+                console.error(error)
+                res.status(500).send({
+                    success:false,
+                    error:SOMETHING_WENT_WRONG
+                })
             })
         }).catch(error=>{
+            if(error === NO_SUCH_CONTENT){
+                res.status(204).send({
+                    success:false,
+                    error:NO_SUCH_CONTENT
+                })
+                return
+            }
             console.error(error)
             res.status(500).send({
-                success:false,
-                error:SOMETHING_WENT_WRONG
+                success: false,
+                error: SOMETHING_WENT_WRONG
             })
         })
+
     }).catch(error=>{
         if(error === NO_SUCH_CONTENT){
             res.status(204).send({
