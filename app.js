@@ -533,9 +533,9 @@ app.put('/api/article/update', (req,res)=>{
     dao.retrieveArticleById(new Articles(req.body.article_id)).then(articleResult=>{
 
         if(typeof req.body.article_image === 'undefined'){
-            article = new Articles(null, req.body.title, bodyJSON, req.body.description, null, null, null)
+            article = new Articles(req.body.article_id, req.body.title, bodyJSON, req.body.description, null, null, null)
         }else{
-            article = new Articles(null, req.body.title, bodyJSON, req.body.description, req.body.article_image, null, null)
+            article = new Articles(req.body.article_id, req.body.title, bodyJSON, req.body.description, req.body.article_image, null, null)
         }
 
         dao.updateArticle(article).then(result=>{
