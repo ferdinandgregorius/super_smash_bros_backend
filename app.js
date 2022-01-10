@@ -532,7 +532,7 @@ app.put('/api/article/update', (req,res)=>{
 
     dao.retrieveArticleById(new Articles(req.body.article_id)).then(articleResult=>{
 
-        dao.retrieveOneUser(new User(null, articleResult[0].username)).then(userResult=>{
+        dao.retrieveOneUser(new User(null, articleResult[0].author)).then(userResult=>{
             if(typeof req.body.article_image === 'undefined'){
                 article = new Articles(null, req.body.title, bodyJSON, req.body.description, null, null, userResult[0].user_id)
             }else{
