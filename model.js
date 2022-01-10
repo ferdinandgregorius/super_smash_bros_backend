@@ -66,8 +66,8 @@ export class Articles{
         this.title = title
         this.body = body
         this.description = description
-        this.date_created = date_created
         this.article_image = article_image
+        this.date_created = date_created
         this.user_id = user_id
     }
 }

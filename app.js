@@ -470,12 +470,13 @@ app.post('/api/articles/add', upload.single('article_image'),(req,res)=>{
         let article
         const bodyJSON = JSON.stringify(req.body.body)
 
-        if(typeof req.file === 'undefined'){
-            article = new Articles(null, req.body.title, bodyJSON, req.body.description, null, null, userResult[0].user_id)
-        }else{
-            article = new Articles(null, req.body.title, bodyJSON, req.body.description, req.file.filename, null, userResult[0].user_id)
-        }
+        article = new Articles(null, req.body.title, bodyJSON, req.body.description, req.body.article_image, null, userResult[0].user_id)
 
+        // if(typeof req.file === 'undefined'){
+        //     article = new Articles(null, req.body.title, bodyJSON, req.body.description, null, null, userResult[0].user_id)
+        // }else{
+        //     article = new Articles(null, req.body.title, bodyJSON, req.body.description, req.file.filename, null, userResult[0].user_id)
+        // }
         dao.addArticle(article).then(result=>{
             res.status(200).send({
                 success: true,
