@@ -495,18 +495,23 @@ app.post('/api/articles/add',(req,res)=>{
             }
         })
     }).catch(error=>{
+        console.error(error)
         if(error === NO_SUCH_CONTENT){
             res.status(204).send({
                 success: false,
                 error: NO_SUCH_CONTENT
             })
-            return
+        }else if(error === PayloadTooLargeError){
+            res.status(413).send({
+                success:false,
+                error:PayloadTooLargeError
+            })
+        }else{
+            res.status(500).send({
+                success:false,
+                error:SOMETHING_WENT_WRONG
+            })
         }
-        console.error(error)
-        res.status(500).send({
-            success: false,
-            error: SOMETHING_WENT_WRONG
-        })
     })
 })
 
