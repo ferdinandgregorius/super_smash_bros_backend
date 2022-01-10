@@ -20,7 +20,7 @@ import {
     NO_MAIN_AACOUNT,
     TRANSACTION_NOT_PENDING,
     SUCCESS,
-    ROLE_HAS_NO_ACCESS
+    ROLE_HAS_NO_ACCESS, IMAGE_SIZE_TOO_LARGE
 } from "./strings";
 
 import {
@@ -482,10 +482,17 @@ app.post('/api/articles/add',(req,res)=>{
             })
         }).catch(error=>{
             console.error(error)
-            res.status(500).send({
-                success:false,
-                error:SOMETHING_WENT_WRONG
-            })
+            if(error === "PayloadTooLargeError"){
+                res.status(413).send({
+                    success:false,
+                    error:IMAGE_SIZE_TOO_LARGE
+                })
+            }else{
+                res.status(500).send({
+                    success:false,
+                    error:SOMETHING_WENT_WRONG
+                })
+            }
         })
     }).catch(error=>{
         if(error === NO_SUCH_CONTENT){

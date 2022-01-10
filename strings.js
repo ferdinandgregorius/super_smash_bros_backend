@@ -12,6 +12,7 @@ export const NO_MAIN_AACOUNT="No main account."
 export const TRANSACTION_NOT_PENDING="Transaction has either been Approved or Rejected."
 export const DATA_IS_DELETED="Data has been deleted."
 export const ROLE_HAS_NO_ACCESS="This Role has no access to this feature."
+export const IMAGE_SIZE_TOO_LARGE="The image size is too large."
 
 //CONSTRAINTS
 export const SUCCESS="SUCCESS"
