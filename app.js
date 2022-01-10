@@ -20,7 +20,7 @@ import {
     NO_MAIN_AACOUNT,
     TRANSACTION_NOT_PENDING,
     SUCCESS,
-    ROLE_HAS_NO_ACCESS, IMAGE_SIZE_TOO_LARGE
+    ROLE_HAS_NO_ACCESS, IMAGE_SIZE_TOO_LARGE, PayloadTooLargeError
 } from "./strings";
 
 import {
@@ -482,10 +482,10 @@ app.post('/api/articles/add',(req,res)=>{
             })
         }).catch(error=>{
             console.error(error)
-            if(error === "PayloadTooLargeError"){
+            if(error === PayloadTooLargeError){
                 res.status(413).send({
                     success:false,
-                    error:IMAGE_SIZE_TOO_LARGE
+                    error:PayloadTooLargeError
                 })
             }else{
                 res.status(500).send({
