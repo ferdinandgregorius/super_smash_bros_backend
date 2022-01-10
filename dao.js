@@ -411,7 +411,7 @@ export class Dao{
 
     retrieveArticles(){
         return new Promise((resolve, reject)=>{
-            const query = "SELECT a.title, a.description, a.date_created, u.username " +
+            const query = "SELECT a.title, a.description, a.date_created, a.article_image, u.username " +
                 "FROM articles a LEFT OUTER JOIN user u ON a.user_id = u.user_id "
 
             this.mysqlConn.query(query, (error,result)=>{
@@ -425,6 +425,7 @@ export class Dao{
                         title:rowDataPacket.title,
                         description:rowDataPacket.description,
                         date_created:rowDataPacket.date_created,
+                        article_image:rowDataPacket.article_image,
                         author:rowDataPacket.username
                     }
                 })
