@@ -503,7 +503,7 @@ app.post('/api/articles/add',(req,res)=>{
     })
 })
 
-app.put('/api/article/update', upload.single('article_image'), (req,res)=>{
+app.put('/api/article/update', (req,res)=>{
     if(typeof req.body.article_id === 'undefined' ||
         typeof req.body.title === 'undefined' ||
         typeof req.body.body === 'undefined' ||
@@ -518,17 +518,13 @@ app.put('/api/article/update', upload.single('article_image'), (req,res)=>{
     let article
     const bodyJSON = JSON.stringify(req.body.body)
 
-    if(typeof req.file === 'undefined'){
-        article = new Articles(req.body.article_id, req.body.title, bodyJSON, req.body.description, null, null)
+    if(typeof req.body.article_image === 'undefined'){
+        article = new Articles(null, req.body.title, bodyJSON, req.body.description, null, null, userResult[0].user_id)
     }else{
-        article = new Articles(req.body.article_id, req.body.title, bodyJSON, req.body.description, req.file.filename, null)
+        article = new Articles(null, req.body.title, bodyJSON, req.body.description, req.body.article_image, null, userResult[0].user_id)
     }
 
     dao.retrieveArticleById(new Articles(req.body.article_id)).then(articleResult=>{
-
-        if(articleResult[0].article_image != null){
-            fs.unlinkSync(UPLOADPATH+articleResult[0].article_image)
-        }
 
         dao.updateArticle(article).then(result=>{
             res.status(200).send({
