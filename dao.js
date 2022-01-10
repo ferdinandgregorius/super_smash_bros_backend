@@ -507,7 +507,7 @@ export class Dao{
                 return
             }
 
-            const query = "SELECT a.article_id, a.title, a.body, a.description, a.date_created, u.username " +
+            const query = "SELECT a.article_id, a.title, a.body, a.description, a.article_image, a.date_created, u.username " +
                 "FROM articles a LEFT OUTER JOIN user u ON a.user_id = u.user_id " +
                 "WHERE a.title=? "
 
@@ -523,6 +523,7 @@ export class Dao{
                         title:rowDataPacket.title,
                         body:rowDataPacket.body,
                         description:rowDataPacket.description,
+                        article_image:rowDataPacket.article_image,
                         date_created:rowDataPacket.date_created,
                         author:rowDataPacket.username
                     }
