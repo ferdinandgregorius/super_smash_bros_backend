@@ -453,7 +453,7 @@ app.get('/api/articles/retrievebyuser', (req,res)=>{
     })
 })
 
-app.post('/api/articles/add', upload.single('article_image'),(req,res)=>{
+app.post('/api/articles/add',(req,res)=>{
     if(typeof req.body.title === 'undefined' ||
        typeof req.body.body === 'undefined' ||
        typeof req.body.description === 'undefined' ||
@@ -469,8 +469,6 @@ app.post('/api/articles/add', upload.single('article_image'),(req,res)=>{
 
         let article
         const bodyJSON = JSON.stringify(req.body.body)
-
-        article = new Articles(null, req.body.title, bodyJSON, req.body.description, req.body.article_image, null, userResult[0].user_id)
 
         if(typeof req.body.article_image === 'undefined'){
             article = new Articles(null, req.body.title, bodyJSON, req.body.description, null, null, userResult[0].user_id)
