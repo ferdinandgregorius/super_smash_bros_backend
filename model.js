@@ -61,13 +61,13 @@ export class Event_matches{
 }
 
 export class Articles{
-    constructor(article_id, title, body, description, article_picture, date_created, user_id) {
+    constructor(article_id, title, body, description, article_image, date_created, user_id) {
         this.article_id = article_id
         this.title = title
         this.body = body
         this.description = description
         this.date_created = date_created
-        this.article_picture = article_picture
+        this.article_image = article_image
         this.user_id = user_id
     }
 }
