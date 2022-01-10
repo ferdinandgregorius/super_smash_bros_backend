@@ -487,7 +487,7 @@ export class Dao{
                             title:rowDataPacket.title,
                             description:rowDataPacket.description,
                             date_created:rowDataPacket.date_created,
-                            article_picture:rowDataPacket.article_picture,
+                            article_image:rowDataPacket.article_image,
                             author:rowDataPacket.username
                         }
                     })
@@ -539,7 +539,7 @@ export class Dao{
                 return
             }
 
-            const query = "SELECT article_picture FROM articles WHERE article_id = ?"
+            const query = "SELECT article_image FROM articles WHERE article_id = ?"
             this.mysqlConn.query(query, article.article_id, (error,result)=>{
                 if(error){
                     reject(error)
@@ -558,9 +558,9 @@ export class Dao{
                 return
             }
 
-            const query = "INSERT INTO `articles`(`title`, `body`, `description`, `article_picture`, `date_created`, `user_id`) " +
+            const query = "INSERT INTO `articles`(`title`, `body`, `description`, `article_image`, `date_created`, `user_id`) " +
                 "VALUES(?, ?, ?, ?, NOW(), ?) "
-            this.mysqlConn.query(query, [article.title, article.body, article.description, article.article_picture, article.user_id], (error, result)=>{
+            this.mysqlConn.query(query, [article.title, article.body, article.description, article.article_image, article.user_id], (error, result)=>{
                 if(error){
                     reject(error)
                     return
@@ -579,8 +579,8 @@ export class Dao{
                 return
             }
 
-            const query = "UPDATE articles SET title = ?, body = ?, description = ?, article_picture = ? WHERE article_id = ? "
-            this.mysqlConn.query(query, [article.title, article.body, article.description, article.article_picture, article.article_id], (error,result)=>{
+            const query = "UPDATE articles SET title = ?, body = ?, description = ?, article_image = ? WHERE article_id = ? "
+            this.mysqlConn.query(query, [article.title, article.body, article.description, article.article_image, article.article_id], (error,result)=>{
                 if(error){
                     reject(error)
                     return
